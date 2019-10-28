@@ -44,9 +44,6 @@ public class Main {
 		
 		Scanner scanner = new Scanner(System.in); // Create a Scanner object
 
-		
-//		System.out.println("User entered: " + personType); // Output user input
-
 		while (answer != "quit" ) { 
 			System.out.println();
 			System.out.println("******************** Sport Concussion Assessment ********************");
@@ -63,7 +60,6 @@ public class Main {
 					System.out.println("Please Enter a Score [0-6] for each Question " + helpText + ": ");
 					System.out.println();
 					while(i < 22) {
-//						System.out.print("Q" + (i+1) + ": " + questions[i] + " " + helpText + ": ");
 						System.out.print("Q" + (i+1) + ": " + questions[i] + ": ");
 						answer = scanner.nextLine(); // Read user input
 						try {
@@ -93,7 +89,6 @@ public class Main {
 					
 				// See Previous Evaluation Summaries
 				} else if (answerInt == 2) {
-					System.out.println("\tSelected: [2] View Evaluation Summaries");
 					System.out.println();
 					
 					if (athlete.getNumEvals() > 0) { 

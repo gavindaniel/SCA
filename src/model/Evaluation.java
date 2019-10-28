@@ -4,8 +4,7 @@ import java.util.Arrays;
 
 public class Evaluation {
 
-	Integer[] answers = new Integer[22];
-//	Integer severity = 
+	private Integer[] answers = new Integer[22];
 	
 	public void printEvaluation() {
 		

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Athlete {
 
-	List<Evaluation> evaluations;
+	private List<Evaluation> evaluations;
 
 	public Athlete() {
 		evaluations = new ArrayList<Evaluation>();
