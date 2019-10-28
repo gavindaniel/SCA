@@ -21,8 +21,16 @@ public class Athlete {
 		evaluations.set(eval, tempEval);
 	}
 	
+	public List<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+	
 	public int getNumEvals() {
 		return evaluations.size();
+	}
+	
+	public Evaluation getEval(int index) {
+		return evaluations.get(index);
 	}
 	
 	public void addEvaluation(Evaluation e) {
@@ -50,9 +58,13 @@ public class Athlete {
 		
 	}
 	
-	public boolean checkIfPreviousEvalExists() {
+	public boolean checkIfPreviousEvalExists(int eNum) {
 		if (evaluations.size() > 1) {
-			return true;
+			if ((eNum-2) >= 0) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 		return false;
 	}
@@ -62,11 +74,13 @@ public class Athlete {
 	}
 
 	public void printOverallRating(int eNum) {
-		if (checkIfPreviousEvalExists() == true) {
+		if (checkIfPreviousEvalExists(eNum) == true) {
 			System.out.println("\tOverall rating: " + evaluations.get(eNum-1).getOverallRating(evaluations.get(eNum-2)));
 		} else {
-			System.out.println("\tOverall rating: Unsure (only 1 evaluation)");
+			System.out.println("\tOverall rating: Unsure (no previous evaluation to compare to)");
 		}
 		
 	}
+	
+	
 }

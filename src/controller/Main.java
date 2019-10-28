@@ -2,7 +2,6 @@ package controller;
 
 import model.Athlete;
 import model.Evaluation;
-import model.Practitioner;
 
 import java.util.Scanner; // Import the Scanner class
 
@@ -13,7 +12,6 @@ public class Main {
 	public static void main(String[] args) {
 
 		Athlete athlete = new Athlete();
-		Practitioner practitioner = new Practitioner();
 		
 		String helpText = "(None [0], Mild [1-2], Moderate [3-4], Severe [5-6])";
 		String answer = "";
@@ -50,66 +48,110 @@ public class Main {
 //		System.out.println("User entered: " + personType); // Output user input
 
 		while (answer != "quit" ) { 
+			System.out.println();
 			System.out.println("******************** Sport Concussion Assessment ********************");
-
-			System.out.print("Enter [1] for Athlete or [2] for Practitioner: ");
+			System.out.println();
+			System.out.print("Enter [1] for New Evaluation or [2] to See Evaluation Summaries or [3] to See If At Risk: ");
 			answer = scanner.nextLine(); // Read user input
 			try {
 				answerInt = Integer.parseInt(answer);
-				// athlete 
-				System.out.println("Entered: " + answer);
+				// New Evaluation
 				if (answerInt == 1) {
-					System.out.print("Enter [1] for New Evaluation or [2] to See Evaluation Summaries: ");
-					answer = scanner.nextLine(); // Read user input
-					try {
-						answerInt = Integer.parseInt(answer);
-						// New Evaluation
-						if (answerInt == 1) {
-							Evaluation eval = new Evaluation();
-							int i = 0;
-							while(i < 22) {
-								System.out.print("Q" + (i+1) + ": " + questions[i] + " " + helpText + ": ");
-								answer = scanner.nextLine(); // Read user input
-								try {
-									answerInt = Integer.parseInt(answer);
-								
-									if ((answerInt >= 0) && (answerInt <= 6)) {
-										eval.setAnswer(i, answerInt);
-										i++;
-									}
-									else {
-										System.out.println("\tError: Enter a Valid Number");
-									}
-								} catch (NumberFormatException e) {
-									System.out.println("\tError: Enter a Valid Number");
+					System.out.println();
+					Evaluation eval = new Evaluation();
+					int i = 0;
+					System.out.println("Please Enter a Score [0-6] for each Question " + helpText + ": ");
+					System.out.println();
+					while(i < 22) {
+//						System.out.print("Q" + (i+1) + ": " + questions[i] + " " + helpText + ": ");
+						System.out.print("Q" + (i+1) + ": " + questions[i] + ": ");
+						answer = scanner.nextLine(); // Read user input
+						try {
+							answerInt = Integer.parseInt(answer);
+						
+							if ((answerInt >= 0) && (answerInt <= 6)) {
+								eval.setAnswer(i, answerInt);
+								i++;
+							}
+							else {
+								if (answer.compareTo("back") == 0 || answer.compareTo("quit") == 0) {
+									break;
+								} else {
+									System.out.println("\tError: Enter a Valid Number " + helpText);
 								}
 							}
-//							System.out.println("********** Evaluation Complete **********");
-							athlete.addEvaluation(eval);
-							eval.printNumSymptoms();
-							eval.printSeverityScore();
-							athlete.printOverallRating(athlete.getNumEvals());
-							
-						// See Previous Evaluation Summaries
-						} else if (answerInt == 2) {
-							
-						} else {
-							System.out.println("\tError: Enter a Valid Number: " + answerInt);
+						} catch (NumberFormatException e) {
+							System.out.println("\tError: Enter a Valid Number " + helpText);
 						}
-					} catch (NumberFormatException e) {
-						System.out.println("\tError: Enter a Valid Number");
 					}
-				// practitioner
+					System.out.println();
+					System.out.println("********** Evaluation Complete **********");
+					athlete.addEvaluation(eval);
+					eval.printNumSymptoms();
+					eval.printSeverityScore();
+					athlete.printOverallRating(athlete.getNumEvals());
+					
+				// See Previous Evaluation Summaries
 				} else if (answerInt == 2) {
-						
-				} else {
+					System.out.println("\tSelected: [2] View Evaluation Summaries");
+					System.out.println();
+					
+					if (athlete.getNumEvals() > 0) { 
+						if (athlete.getNumEvals() == 1) {
+							System.out.print("Enter [1] to View Last Game Evaulation Summary: ");
+							answer = scanner.nextLine(); // Read user input
+						}
+						else { 
+							for (int i=0; i < athlete.getNumEvals(); i++) {
+								if (i == 0) {
+									System.out.println("Enter [1] to View Last Game Evaulation Summary,");
+								} else {
+									System.out.print("Enter [" + (i+1) + "] to View " + (i+1) + " Games Ago Evaluation Summary");
+									if (i == (athlete.getNumEvals()-1)) {
+										System.out.print(": ");
+									} else {
+										System.out.println(",");
+									}
+								}
+							}
+							answer = scanner.nextLine(); // Read user input
+						}
+						try {
+							answerInt = Integer.parseInt(answer);
+							if (answerInt >= 1 && answerInt <= athlete.getNumEvals()) {
+								Evaluation e = athlete.getEval(answerInt-1);
+								System.out.println();
+								System.out.println("********** Evaluation Summary **********");
+								e.printNumSymptoms();
+								e.printSeverityScore();
+								athlete.printOverallRating(answerInt);
+								System.out.println();
+							} else {
+								System.out.println("\tError: Enter a Valid Number");
+							}
+						} catch (NumberFormatException e) {
+							System.out.println("\tError: Enter a Valid Number");
+						}
+					} else {
+						System.out.println("No evaluations on record. Please submit an evaluation first.");
+					}
+				} else if (answerInt == 3) {
+					athlete.printOverallRating(athlete.getNumEvals());
+				}
+				else {
 					System.out.println("\tError: Enter a Valid Number: " + answerInt);
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("\tError: Enter a Valid Number");	
+				if (answer.compareTo("quit") == 0) {
+					break;
+				} else {
+					System.out.println("\tError: Enter a Valid Number");
+				}
 			}
 		} 
 		scanner.close();
+		System.out.println();
+		System.out.println("******************** Application Terminated ********************");
 	}
 
 }
